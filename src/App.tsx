@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { createContext, useMemo, useState } from "react";
 import "./App.css";
 
 import { Wheel } from "react-custom-roulette";
+
+import { Avatar, CssBaseline, Dialog, DialogTitle, Fab, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { getLink } from "./utils/data";
+
+const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 const data = [
   { option: "1" },
@@ -47,15 +56,16 @@ const outerBorderWidth = 10;
 const innerBorderColor = "#30261a";
 const innerBorderWidth = 0;
 const innerRadius = 0;
-const radiusLineColor = "#eeeeee";
 const radiusLineWidth = 8;
-const fontFamily = "Nunito";
+const fontFamily = "Source Code Pro";
 const fontSize = 20;
 const textDistance = 60;
 const spinDuration = 1.0;
 
 const App = () => {
   const [mustSpin, setMustSpin] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [ganador, setGanador] = useState<number | undefined>(undefined);
 
@@ -71,49 +81,91 @@ const App = () => {
     return data[prizeNumber].option;
   };
 
+  const [mode, setMode] = React.useState<'light' | 'dark'>('dark')
+
+  const colorMode = useMemo(
+    () => ({
+      // The dark mode switch would invoke this method
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
+    }),
+    [mode]
+  );
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Wheel
-          mustStartSpinning={mustSpin}
-          prizeNumber={prizeNumber}
-          data={data}
-          backgroundColors={backgroundColors}
-          textColors={textColors}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
-          outerBorderColor={outerBorderColor}
-          outerBorderWidth={outerBorderWidth}
-          innerRadius={innerRadius}
-          innerBorderColor={innerBorderColor}
-          innerBorderWidth={innerBorderWidth}
-          radiusLineColor={radiusLineColor}
-          radiusLineWidth={radiusLineWidth}
-          spinDuration={spinDuration}
-          startingOptionIndex={2}
-          // perpendicularText
-          textDistance={textDistance}
-          onStopSpinning={() => {
-            setMustSpin(false);
-            const winningOption = getWinningOption(prizeNumber, data);
-            console.log(`The winning option is ${winningOption}`);
-            setGanador(parseInt(winningOption) - 1);
-          }}
-        />
-        <button className={"spin-button"} onClick={handleSpinClick}>
-          SPIN
-        </button>
-        <p style={{ color: "black" }}>
-          {ganador ? dataText[ganador].titulo : null}
-          <br />
-          {ganador ? (
-            <img src="http://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/387c850f1455fab.png" />
-          ) : null}
-          <br />
-          {ganador ? "La descripcion" : null}
-          <br />
-        </p>
-      </header>
+    <div className="App" style={{fontFamily: fontFamily}}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <header className="App-header">
+            {ganador && 
+            <Dialog fullWidth maxWidth="xl" open={openDetail} onClose={() => setOpenDetail(false)}>
+              <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
+              <iframe height={'800px'} src={getLink[ganador].link}/>
+            </Dialog>
+            }
+            <Dialog fullWidth maxWidth={"sm"} open={openSettings} onClose={() => setOpenSettings(false)}>
+              <DialogTitle>Configuración</DialogTitle>
+              <List sx={{ pt: 0 }}>
+                <ListItem disableGutters>
+                  <ListItemButton key={'a'} onClick={colorMode.toggleColorMode} color={"default"}>
+                    <ListItemAvatar>
+                      <Avatar >
+                        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={"Modo"} />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Dialog>
+            <Fab sx={{ position: 'fixed', bottom: 15, right: 10 }} color="secondary" aria-label="add" onClick={() => setOpenSettings(true)}>
+              <SettingsIcon />
+            </Fab>
+            <Wheel
+              mustStartSpinning={mustSpin}
+              prizeNumber={prizeNumber}
+              data={data}
+              backgroundColors={backgroundColors}
+              textColors={textColors}
+              fontFamily={fontFamily}
+              fontSize={fontSize}
+              outerBorderColor={theme.palette.background.default}
+              outerBorderWidth={outerBorderWidth}
+              innerRadius={innerRadius}
+              innerBorderColor={theme.palette.background.paper}
+              innerBorderWidth={innerBorderWidth}
+              radiusLineColor={theme.palette.background.paper}
+              radiusLineWidth={radiusLineWidth}
+              spinDuration={spinDuration}
+              startingOptionIndex={2}              
+              // perpendicularText
+              textDistance={textDistance}
+              onStopSpinning={() => {
+                setMustSpin(false);
+                const winningOption = getWinningOption(prizeNumber, data);
+                console.log(`The winning option is ${winningOption}`);
+                setOpenDetail(true);
+                setGanador(parseInt(winningOption) - 1);
+              }}
+            />
+            <button style={{fontFamily: fontFamily}} className={"spin-button"} onClick={handleSpinClick}>
+              GIRAR
+            </button>           
+          </header>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </div>
   );
 };
