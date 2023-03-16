@@ -104,16 +104,17 @@ const App = () => {
   );
 
   return (
-    <div className="App" style={{fontFamily: fontFamily}}>
+    <div className="App" style={{ fontFamily: fontFamily }}>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <header className="App-header">
-            {ganador && 
-            <Dialog fullWidth maxWidth="xl" open={openDetail} onClose={() => setOpenDetail(false)}>
-              <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
-              <iframe height={'800px'} src={getLink[ganador].link}/>
-            </Dialog>
+          <Typography variant="h1" sx={{ fontFamily: fontFamily, marginBottom: '10px', color: theme.palette.text.primary }}>Ruleta de trámites</Typography>
+            {ganador &&
+              <Dialog fullWidth maxWidth="xl" open={openDetail} onClose={() => setOpenDetail(false)}>
+                <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
+                <iframe height={'800px'} src={getLink[ganador].link} />
+              </Dialog>
             }
             <Dialog fullWidth maxWidth={"sm"} open={openSettings} onClose={() => setOpenSettings(false)}>
               <DialogTitle>Configuración</DialogTitle>
@@ -149,7 +150,7 @@ const App = () => {
               radiusLineColor={theme.palette.background.paper}
               radiusLineWidth={radiusLineWidth}
               spinDuration={spinDuration}
-              startingOptionIndex={2}              
+              startingOptionIndex={2}
               // perpendicularText
               textDistance={textDistance}
               onStopSpinning={() => {
@@ -160,9 +161,10 @@ const App = () => {
                 setGanador(parseInt(winningOption) - 1);
               }}
             />
-            <button style={{fontFamily: fontFamily}} className={"spin-button"} onClick={handleSpinClick}>
+            <button style={{ fontFamily: fontFamily }} className={"spin-button"} onClick={handleSpinClick}>
               GIRAR
-            </button>           
+            </button>
+          <Typography sx={{position: 'fixed', bottom: 10, color: theme.palette.text.primary}} variant="caption">Powered by <span style={{color: theme.palette.secondary.main}}>Triangle Programming&copy;</span> & <span style={{color: theme.palette.primary.main}}> Software4All&copy;</span> (2023) <br></br>para la materia Administración de Proyectos de Negocios, <br/> impartida por el Profesor Keymer Inclán Robles</Typography>
           </header>
         </ThemeProvider>
       </ColorModeContext.Provider>
