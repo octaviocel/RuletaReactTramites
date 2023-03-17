@@ -111,8 +111,9 @@ const App = () => {
           <header className="App-header">
           <Typography variant="h1" sx={{ fontFamily: fontFamily, marginBottom: '10px', color: theme.palette.text.primary }}>Ruleta de trámites</Typography>
             {ganador &&
+            
               <Dialog fullWidth maxWidth="xl" open={openDetail} onClose={() => setOpenDetail(false)}>
-                <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
+                <DialogTitle>{dataText[ganador].titulo} ayuda</DialogTitle>
                 <iframe height={'800px'} src={getLink[ganador].link} />
               </Dialog>
             }
@@ -164,7 +165,8 @@ const App = () => {
             <button style={{ fontFamily: fontFamily }} className={"spin-button"} onClick={handleSpinClick}>
               GIRAR
             </button>
-          <Typography sx={{position: 'fixed', bottom: 10, color: theme.palette.text.primary}} variant="caption">Powered by <span style={{color: theme.palette.secondary.main}}>Triangle Programming&copy;</span> & <span style={{color: theme.palette.primary.main}}> Software4All&copy;</span> (2023) <br></br>para la materia Administración de Proyectos de Negocios, <br/> impartida por el Profesor Keymer Inclán Robles</Typography>
+          <Typography sx={{position: 'fixed', bottom: 10, color: theme.palette.text.primary}} variant="caption">Powered by <span style={{color: theme.palette.secondary.main}}>Triangle Programming&copy;</span> & <span style={{color: theme.palette.primary.main}}> Software4All&copy;</span> (2023) <br></br>para la materia Administración de Proyectos de Negocios, <br/> impartida por el Profesor <a href="www.linkedin.com/in/keymerinclan" style={{textDecoration: 'none', color: theme.palette.text.primary}}>Keymer Inclán Robles</a>
+          </Typography>
           </header>
         </ThemeProvider>
       </ColorModeContext.Provider>
