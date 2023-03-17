@@ -27,7 +27,7 @@ import LoopIcon from "@mui/icons-material/Loop";
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const data = [
-  { option: "Permiso",},
+  { option: "Permiso" },
   { option: "Protocolización A. C." },
   {
     option: "Inscripción R. F. C.",
@@ -219,16 +219,19 @@ const App = () => {
                 const winningOption = getWinningOption(prizeNumber, data);
                 console.log(`The winning option is ${winningOption}`);
                 setOpenDetail(true);
-                setGanador(parseInt(winningOption) - 1);
+                const index = data.findIndex((item) => item.option === winningOption);
+                setGanador(index);
               }}
             />
-
+            <button
+              style={{ fontFamily: fontFamily }}
+              className={"spin-button"}
+              onClick={handleSpinClick}
+            >
+              GIRAR
+            </button>
             <Typography
-              sx={{
-                
-                bottom: 2,
-                color: theme.palette.text.primary,
-              }}
+              sx={{ marginY: 2, color: theme.palette.text.primary }}
               variant="caption"
             >
               Powered by{" "}
@@ -240,11 +243,17 @@ const App = () => {
                 {" "}
                 Software4All&copy;
               </span>{" "}
-              (2023) para la materia Administración de Proyectos de Negocios,{" "}
-              <br /> impartida por el{" "}
-              <span style={{ color: theme.palette.secondary.main }}>
-                Profesor Keymer Inclán Robles
-              </span>
+              (2023) <br></br>para la materia Administración de Proyectos de
+              Negocios, <br /> impartida por el Profesor{" "}
+              <a
+                href="www.linkedin.com/in/keymerinclan"
+                style={{
+                  textDecoration: "none",
+                  color: theme.palette.text.primary,
+                }}
+              >
+                Keymer Inclán Robles
+              </a>
             </Typography>
           </header>
         </ThemeProvider>
