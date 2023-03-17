@@ -45,6 +45,12 @@
   padding-top: 3px;
 }
 
+.bhdLno {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: 85vh !important;
+  height: 85vh !important;
+}
 .spin-button:active {
   padding-top: 5px;
   background-color: rgb(41, 41, 41);

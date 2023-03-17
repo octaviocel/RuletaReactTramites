@@ -3,30 +3,51 @@ import "./App.css";
 
 import { Wheel } from "react-custom-roulette";
 
-import { Avatar, CssBaseline, Dialog, DialogTitle, Fab, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from "@mui/material";
+import {
+  Avatar,
+  CssBaseline,
+  Dialog,
+  DialogTitle,
+  Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import SettingsIcon from '@mui/icons-material/Settings';
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { getLink } from "./utils/data";
+import LoopIcon from "@mui/icons-material/Loop";
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const data = [
-  { option: "1" },
-  { option: "2" },
-  { option: "3", style: { textColor: "#f9dd50" } },
-  { option: "4 " },
-  { option: "5" },
-  { option: "6" },
-  { option: "7", style: { textColor: "#70bbe0" } },
-  { option: "8" },
-  { option: "9" },
-  { option: "10" },
-  { option: "11", style: { textColor: "#f9dd50" } },
-  { option: "12" },
-  { option: "13" },
-  { option: "14" },
+  { option: "Permiso",},
+  { option: "Protocolización A. C." },
+  {
+    option: "Inscripción R. F. C.",
+    style: { textColor: "#f9dd50" },
+  },
+  { option: "Inscripción A. C." },
+  { option: "Inscripción E." },
+  {
+    option: "Permiso U. C. y/o C.",
+  },
+  { option: "Inscripción E. (Salud)", style: { textColor: "#70bbe0" } },
+  { option: "Registro P. T. (IMSS)" },
+  { option: "Inscripción SIEM" },
+  { option: "Establecimiento C. S. H." },
+  { option: "Comisión C. A.", style: { textColor: "#f9dd50" } },
+  {
+    option: "Inscripción P. P. C. A.",
+  },
+  { option: "Registro IMPI" },
+  { option: "Registro E. S. E." },
 ];
 
 const dataText = [
@@ -58,7 +79,7 @@ const innerBorderWidth = 0;
 const innerRadius = 0;
 const radiusLineWidth = 8;
 const fontFamily = "Source Code Pro";
-const fontSize = 20;
+const fontSize = 11;
 const textDistance = 60;
 const spinDuration = 1.0;
 
@@ -81,7 +102,7 @@ const App = () => {
     return data[prizeNumber].option;
   };
 
-  const [mode, setMode] = React.useState<'light' | 'dark'>('dark')
+  const [mode, setMode] = React.useState<"light" | "dark">("dark");
 
   const colorMode = useMemo(
     () => ({
@@ -108,22 +129,49 @@ const App = () => {
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <Typography
+            variant="h2"
+            sx={{
+              fontFamily: fontFamily,
+              marginTop: "20px",
+              color: theme.palette.text.primary,
+            }}
+          >
+            Trámites para la apertura de un negocio
+          </Typography>
           <header className="App-header">
-          <Typography variant="h1" sx={{ fontFamily: fontFamily, marginBottom: '10px', color: theme.palette.text.primary }}>Ruleta de trámites</Typography>
-            {ganador &&
-              <Dialog fullWidth maxWidth="xl" open={openDetail} onClose={() => setOpenDetail(false)}>
+            {ganador && (
+              <Dialog
+                fullWidth
+                maxWidth="xl"
+                open={openDetail}
+                onClose={() => setOpenDetail(false)}
+              >
                 <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
-                <iframe height={'800px'} src={getLink[ganador].link} />
+                <iframe height={"800px"} src={getLink[ganador].link} />
               </Dialog>
-            }
-            <Dialog fullWidth maxWidth={"sm"} open={openSettings} onClose={() => setOpenSettings(false)}>
+            )}
+            <Dialog
+              fullWidth
+              maxWidth={"sm"}
+              open={openSettings}
+              onClose={() => setOpenSettings(false)}
+            >
               <DialogTitle>Configuración</DialogTitle>
               <List sx={{ pt: 0 }}>
                 <ListItem disableGutters>
-                  <ListItemButton key={'a'} onClick={colorMode.toggleColorMode} color={"default"}>
+                  <ListItemButton
+                    key={"a"}
+                    onClick={colorMode.toggleColorMode}
+                    color={"default"}
+                  >
                     <ListItemAvatar>
-                      <Avatar >
-                        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                      <Avatar>
+                        {theme.palette.mode === "dark" ? (
+                          <Brightness7Icon />
+                        ) : (
+                          <Brightness4Icon />
+                        )}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={"Modo"} />
@@ -131,8 +179,21 @@ const App = () => {
                 </ListItem>
               </List>
             </Dialog>
-            <Fab sx={{ position: 'fixed', bottom: 15, right: 10 }} color="secondary" aria-label="add" onClick={() => setOpenSettings(true)}>
+            <Fab
+              sx={{ position: "fixed", bottom: 15, right: 10 }}
+              color="secondary"
+              aria-label="add"
+              onClick={() => setOpenSettings(true)}
+            >
               <SettingsIcon />
+            </Fab>
+            <Fab
+              sx={{ position: "fixed", bottom: 15, right: 80 }}
+              color="secondary"
+              aria-label="add"
+              onClick={handleSpinClick}
+            >
+              <LoopIcon />
             </Fab>
             <Wheel
               mustStartSpinning={mustSpin}
@@ -161,10 +222,30 @@ const App = () => {
                 setGanador(parseInt(winningOption) - 1);
               }}
             />
-            <button style={{ fontFamily: fontFamily }} className={"spin-button"} onClick={handleSpinClick}>
-              GIRAR
-            </button>
-          <Typography sx={{position: 'fixed', bottom: 10, color: theme.palette.text.primary}} variant="caption">Powered by <span style={{color: theme.palette.secondary.main}}>Triangle Programming&copy;</span> & <span style={{color: theme.palette.primary.main}}> Software4All&copy;</span> (2023) <br></br>para la materia Administración de Proyectos de Negocios, <br/> impartida por el Profesor Keymer Inclán Robles</Typography>
+
+            <Typography
+              sx={{
+                
+                bottom: 2,
+                color: theme.palette.text.primary,
+              }}
+              variant="caption"
+            >
+              Powered by{" "}
+              <span style={{ color: theme.palette.secondary.main }}>
+                Triangle Programming&copy;
+              </span>{" "}
+              &{" "}
+              <span style={{ color: theme.palette.primary.main }}>
+                {" "}
+                Software4All&copy;
+              </span>{" "}
+              (2023) para la materia Administración de Proyectos de Negocios,{" "}
+              <br /> impartida por el{" "}
+              <span style={{ color: theme.palette.secondary.main }}>
+                Profesor Keymer Inclán Robles
+              </span>
+            </Typography>
           </header>
         </ThemeProvider>
       </ColorModeContext.Provider>
