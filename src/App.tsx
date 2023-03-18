@@ -246,7 +246,8 @@ const App = () => {
               (2023) <br></br>para la materia Administración de Proyectos de
               Negocios, <br /> impartida por el Profesor{" "}
               <a
-                href="www.linkedin.com/in/keymerinclan"
+                href="https://www.linkedin.com/in/keymerinclan"
+                target="_blank"
                 style={{
                   textDecoration: "none",
                   color: theme.palette.text.primary,
