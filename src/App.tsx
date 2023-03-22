@@ -7,6 +7,7 @@ import {
   Avatar,
   CssBaseline,
   Dialog,
+  DialogContent,
   DialogTitle,
   Fab,
   IconButton,
@@ -23,31 +24,84 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { getLink } from "./utils/data";
 import LoopIcon from "@mui/icons-material/Loop";
+import CloseIcon from "@mui/icons-material/Close";
+import logoBlack from "./assets/image.png";
+import logoWhite from "./assets/ulsablanca.png";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const data = [
-  { option: "Permiso" },
-  { option: "Protocolización A. C." },
   {
-    option: "Inscripción R. F. C.",
+    option: "Permiso para constituirse como persona moral",
+    style: {
+      fontSize: 7,
+    },
+  },
+  {
+    option: "Protocolización del Acta Constitutiva",
+    style: {
+      fontSize: 7.5,
+    },
+  },
+  {
+    option: "Inscripción en el Registro Federal de Contribuyentes",
+    style: { textColor: "#f9dd50", fontSize: 6.5 },
+  },
+  {
+    option: "Inscripción del Acta Constitutiva",
+    style: {
+      fontSize: 9,
+    },
+  },
+  {
+    option: "Inscripción de la Empresa",
+    style: {
+      fontSize: 9,
+    },
+  },
+  {
+    option: "Permiso de uso de suelo y/o Construcción",
+  },
+  {
+    option: "Inscripción de la Empresa (Salud)",
+    style: { textColor: "#70bbe0", fontSize: 8 },
+  },
+  { option: "Registro del patrón y los trabajadores (IMSS)" },
+  {
+    option: "Inscripción SIEM",
+    style: {
+      fontSize: 12,
+    },
+  },
+  {
+    option: "Establecimiento de la Comisión de Seguridad e Higiene",
+    style: {
+      fontSize: 6.5,
+    },
+  },
+  {
+    option: "Comisión de Capacitación y Adiestramiento",
     style: { textColor: "#f9dd50" },
   },
-  { option: "Inscripción A. C." },
-  { option: "Inscripción E." },
   {
-    option: "Permiso U. C. y/o C.",
+    option:
+      "Inscripción de los Planes y Programas de Capacitación y Adiestramiento",
+    style: {
+      fontSize: 4.5,
+    },
   },
-  { option: "Inscripción E. (Salud)", style: { textColor: "#70bbe0" } },
-  { option: "Registro P. T. (IMSS)" },
-  { option: "Inscripción SIEM" },
-  { option: "Establecimiento C. S. H." },
-  { option: "Comisión C. A.", style: { textColor: "#f9dd50" } },
   {
-    option: "Inscripción P. P. C. A.",
+    option: "Registro de marca ante el IMPI",
+    style: {
+      fontSize: 8,
+    },
   },
-  { option: "Registro IMPI" },
-  { option: "Registro E. S. E." },
+  {
+    option: "Registro de la empresa en la Secretaría de Economía",
+    style: {
+      fontSize: 6.5,
+    },
+  },
 ];
 
 const dataText = [
@@ -73,13 +127,13 @@ const dataText = [
 const backgroundColors = ["#ff8f43", "#70bbe0", "#0b3351", "#f9dd50"];
 const textColors = ["#0b3351"];
 const outerBorderColor = "#eeeeee";
-const outerBorderWidth = 10;
+const outerBorderWidth = 0;
 const innerBorderColor = "#30261a";
 const innerBorderWidth = 0;
 const innerRadius = 0;
 const radiusLineWidth = 8;
-const fontFamily = "Source Code Pro";
-const fontSize = 11;
+const fontFamily = "Quicksand";
+const fontSize = 7;
 const textDistance = 60;
 const spinDuration = 1.0;
 
@@ -87,6 +141,8 @@ const App = () => {
   const [mustSpin, setMustSpin] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
+  const [openTriangle, setOpenTriangle] = useState(false);
+  const [openSoft, setOpenSoft] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [ganador, setGanador] = useState<number | undefined>(undefined);
 
@@ -106,7 +162,6 @@ const App = () => {
 
   const colorMode = useMemo(
     () => ({
-      // The dark mode switch would invoke this method
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
@@ -140,15 +195,27 @@ const App = () => {
             Trámites para la apertura de un negocio
           </Typography>
           <header className="App-header">
-            {ganador && (
+            {Number(ganador) >= 0 && (
               <Dialog
                 fullWidth
                 maxWidth="xl"
                 open={openDetail}
                 onClose={() => setOpenDetail(false)}
               >
-                <DialogTitle>{dataText[ganador].titulo}</DialogTitle>
-                <iframe height={"800px"} src={getLink[ganador].link} />
+                <DialogTitle>{dataText[Number(ganador)].titulo}</DialogTitle>
+                <IconButton
+                  aria-label="close"
+                  onClick={() => setOpenDetail(false)}
+                  sx={{
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+                <iframe height={"800px"} src={getLink[Number(ganador)].link} />
               </Dialog>
             )}
             <Dialog
@@ -217,9 +284,10 @@ const App = () => {
               onStopSpinning={() => {
                 setMustSpin(false);
                 const winningOption = getWinningOption(prizeNumber, data);
-                console.log(`The winning option is ${winningOption}`);
                 setOpenDetail(true);
-                const index = data.findIndex((item) => item.option === winningOption);
+                const index = data.findIndex(
+                  (item) => item.option === winningOption
+                );
                 setGanador(index);
               }}
             />
@@ -235,14 +303,22 @@ const App = () => {
               variant="caption"
             >
               Powered by{" "}
-              <span style={{ color: theme.palette.secondary.main }}>
+              <a
+                href="#"
+                onClick={() => setOpenTriangle(true)}
+                style={{ color: theme.palette.secondary.main }}
+              >
                 Triangle Programming&copy;
-              </span>{" "}
+              </a>{" "}
               &{" "}
-              <span style={{ color: theme.palette.primary.main }}>
+              <a
+                href="#"
+                onClick={() => setOpenSoft(true)}
+                style={{ color: theme.palette.primary.main }}
+              >
                 {" "}
                 Software4All&copy;
-              </span>{" "}
+              </a>{" "}
               (2023) <br></br>para la materia Administración de Proyectos de
               Negocios, <br /> impartida por el Profesor{" "}
               <a
@@ -256,7 +332,38 @@ const App = () => {
                 Keymer Inclán Robles
               </a>
             </Typography>
+            {theme.palette.mode === "dark" ? (
+              <img src={logoWhite} width="200vw" />
+            ) : (
+              <img src={logoBlack} width="200vw" />
+            )}
           </header>
+          <Dialog open={openTriangle} onClose={() => setOpenTriangle(false)}>
+            <DialogContent dividers>
+              <Typography variant="h5">Integrantes del equipo</Typography>
+              <Typography gutterBottom>
+                * Felipe de Jésus Soriano Silva
+                <br />
+                * Azucena Reyes Santiago
+                <br />
+                * Ángel Ricardo Chávez Velasco
+                <br />* Carlos Eduardo Cruz Gómez
+              </Typography>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={openSoft} onClose={() => setOpenSoft(false)}>
+            <DialogContent dividers>
+              <Typography variant="h5">Integrantes del equipo</Typography>
+              <Typography gutterBottom>
+                * Jairo Esteban Martínez Portillo
+                <br />
+                * Octavio Agustín Celaya Ojeda
+                <br />
+                * Rafael Antonio López García
+                <br />* Carlos Daniel Valdez Martínex
+              </Typography>
+            </DialogContent>
+          </Dialog>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </div>
