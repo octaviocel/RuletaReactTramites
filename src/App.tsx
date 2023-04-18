@@ -5,6 +5,7 @@ import { Wheel } from "react-custom-roulette";
 
 import {
   Avatar,
+  Box,
   CssBaseline,
   Dialog,
   DialogContent,
@@ -188,13 +189,21 @@ const App = () => {
             variant="h2"
             sx={{
               fontFamily: fontFamily,
-              marginTop: "20px",
+              padding: "20px",
               color: theme.palette.text.primary,
             }}
           >
             Trámites para la apertura de un negocio
           </Typography>
-          <header className="App-header">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "center",
+              justifyContent: "center",
+              paddingTop: 4,
+            }}
+          >
             {Number(ganador) >= 0 && (
               <Dialog
                 fullWidth
@@ -262,42 +271,59 @@ const App = () => {
             >
               <LoopIcon />
             </Fab>
-            <Wheel
-              mustStartSpinning={mustSpin}
-              prizeNumber={prizeNumber}
-              data={data}
-              backgroundColors={backgroundColors}
-              textColors={textColors}
-              fontFamily={fontFamily}
-              fontSize={fontSize}
-              outerBorderColor={theme.palette.background.default}
-              outerBorderWidth={outerBorderWidth}
-              innerRadius={innerRadius}
-              innerBorderColor={theme.palette.background.paper}
-              innerBorderWidth={innerBorderWidth}
-              radiusLineColor={theme.palette.background.paper}
-              radiusLineWidth={radiusLineWidth}
-              spinDuration={spinDuration}
-              startingOptionIndex={2}
-              // perpendicularText
-              textDistance={textDistance}
-              onStopSpinning={() => {
-                setMustSpin(false);
-                const winningOption = getWinningOption(prizeNumber, data);
-                setOpenDetail(true);
-                const index = data.findIndex(
-                  (item) => item.option === winningOption
-                );
-                setGanador(index);
+            <Box
+              sx={{
+                width: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-            <button
-              style={{ fontFamily: fontFamily }}
-              className={"spin-button"}
-              onClick={handleSpinClick}
             >
-              GIRAR
-            </button>
+              <Wheel
+                mustStartSpinning={mustSpin}
+                prizeNumber={prizeNumber}
+                data={data}
+                backgroundColors={backgroundColors}
+                textColors={textColors}
+                fontFamily={fontFamily}
+                fontSize={fontSize}
+                outerBorderColor={theme.palette.background.default}
+                outerBorderWidth={outerBorderWidth}
+                innerRadius={innerRadius}
+                innerBorderColor={theme.palette.background.paper}
+                innerBorderWidth={innerBorderWidth}
+                radiusLineColor={theme.palette.background.paper}
+                radiusLineWidth={radiusLineWidth}
+                spinDuration={spinDuration}
+                startingOptionIndex={2}
+                textDistance={textDistance}
+                onStopSpinning={() => {
+                  setMustSpin(false);
+                  const winningOption = getWinningOption(prizeNumber, data);
+                  setOpenDetail(true);
+                  const index = data.findIndex(
+                    (item) => item.option === winningOption
+                  );
+                  setGanador(index);
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <button
+                style={{ fontFamily: fontFamily }}
+                className={"spin-button"}
+                onClick={handleSpinClick}
+              >
+                GIRAR
+              </button>
+            </Box>
             <Typography
               sx={{ marginY: 2, color: theme.palette.text.primary }}
               variant="caption"
@@ -332,12 +358,14 @@ const App = () => {
                 Keymer Inclán Robles
               </a>
             </Typography>
-            {theme.palette.mode === "dark" ? (
-              <img src={logoWhite} width="200vw" />
-            ) : (
-              <img src={logoBlack} width="200vw" />
-            )}
-          </header>
+            <Box>
+              {theme.palette.mode === "dark" ? (
+                <img src={logoWhite} width="200vw" />
+              ) : (
+                <img src={logoBlack} width="200vw" />
+              )}
+            </Box>
+          </Box>
           <Dialog open={openTriangle} onClose={() => setOpenTriangle(false)}>
             <DialogContent dividers>
               <Typography variant="h5">Integrantes del equipo</Typography>
